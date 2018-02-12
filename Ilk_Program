@@ -1,0 +1,15 @@
+#include "msp430.h"          
+          org 0f800h
+reset     mov #0280h,SP 
+          mov #WDTPW+WDTHOLD,&WDTCTL 
+          bis.b #001h,&P1DIR           // bis kaynak,hedef
+
+loop      xor.b #001h,&P1OUT
+          mov #050000,R4
+wait      dec R4                       // dec hedef
+          jnz wait                     // jnz etiket
+          jmp loop
+
+          org 0fffeh
+          dw reset
+          END
