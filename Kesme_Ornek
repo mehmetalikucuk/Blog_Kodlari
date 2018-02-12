@@ -1,0 +1,23 @@
+#include "msp430.h"
+
+          ORG 0F800h 
+reset     mov.w #0280h,SP 
+          mov.w #WDTPW+WDTHOLD,&WDTCTL 
+          bis.b #001h,&P1DIR 
+          bis.b #008h,&P1IE 
+          bis.b #008h,&P1REN 
+          bic.b #008h,&P1IFG 
+          eint 
+          clr r5    
+aa        jmp aa
+
+buton     inc r5 
+          xor.b #001h,&P1OUT 
+          bic.b #008h,P1IFG 
+          reti 
+          
+          ORG 0FFFEh 
+          DW reset 
+          ORG 0FFE4h 
+          DW buton 
+          END
