@@ -1,0 +1,32 @@
+#include "msp430.h"
+
+         ORG 0F800h
+reset    mov #0280h,SP
+         MOV.W #WDTPW+WDTHOLD,&WDTCTL 
+         call #ortalama
+
+a        JMP a
+
+ortalama 
+         clr r5
+         clr r6
+         clr r7
+ 
+aa       add 0200h(r5),r6
+         adc r7
+         incd r5
+         mov #010h,r4
+         cmp r4,r5 ;r5-r4
+         jnz aa
+ 
+         rrc r7
+         rrc r6
+         rrc r7
+         rrc r6
+         rrc r7
+         rrc r6
+         ret
+ 
+         org 0FFFEh
+         dw reset
+         END
