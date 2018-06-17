@@ -1,0 +1,19 @@
+#include "msp430.h"
+
+        ORG     0F800h 
+reset   MOV     #0280h,SP 
+        MOV     #WDTPW+WDTHOLD,&WDTCTL 
+        MOV     &0200h,R6     ;200h adresindeki sayı R6 ya atıldı
+        MOV     &0202h,R7     ;202h adresindeki sayı R7 ye atıldı
+        CALL    #carpma       ;carpma alt programı çağırıldı
+aa      JMP     aa
+
+carpma  CLR     R8            
+dongu   ADD     R6,R8         ;R6 daki sayı R8 e eklendi
+        DEC     R7            ;R7 bir azaltıldı
+        JNZ     dongu         ;R7 sıfırlanana kadar döngü devam etti
+        RET
+        
+        ORG     0FFFEh 
+        DW      reset 
+        END
