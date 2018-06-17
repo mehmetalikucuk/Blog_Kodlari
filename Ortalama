@@ -1,32 +1,30 @@
 #include "msp430.h"
 
-         ORG 0F800h
-reset    mov #0280h,SP
-         MOV.W #WDTPW+WDTHOLD,&WDTCTL 
-         call #ortalama
+         ORG      0F800h
+reset    MOV      #0280h,SP
+         MOV      #WDTPW+WDTHOLD,&WDTCTL 
+         CALL     #ortalama         ;ortalama alt programı çağırıldı
+aa       JMP      aa
 
-a        JMP a
-
-ortalama 
-         clr r5
-         clr r6
-         clr r7
+ortalama CLR      R5
+         CLR      R6
+         CLR      R7
  
-aa       add 0200h(r5),r6
-         adc r7
-         incd r5
-         mov #010h,r4
-         cmp r4,r5 ;r5-r4
-         jnz aa
+loop     ADD      0200h(R5),R6      ;loop döngüsü ile 200h ile 210h arasındaki sayılar R6 ve R7 ye kaydedildi
+         ADC      R7
+         INCD     R5
+         MOV      #010h,R4
+         CMP      R4,R5             ;210h adresine gelindi mi? karşılaştırması (R5-R4)
+         jnz      loop
  
-         rrc r7
-         rrc r6
-         rrc r7
-         rrc r6
-         rrc r7
-         rrc r6
-         ret
+         RRC      R7                ;3 defa sağa kaydırma yapılarak 8 e bölme gerçelşetirildi
+         RRC      R6
+         RRC      R7
+         RRC      R6
+         RRC      R7
+         RRC      R6
+         RET                        ;Alt programdan çıkıldı
  
-         org 0FFFEh
-         dw reset
+         ORG      0FFFEh
+         DW       reset
          END
