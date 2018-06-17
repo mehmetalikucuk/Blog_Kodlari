@@ -1,21 +1,21 @@
 #include "msp430.h"
 
-       ORG 0F800h
-reset  mov.w #0280h,SP
-       mov.w #WDTPW+WDTHOLD,&WDTCTL
-       clr r6
-       clr r7
+       ORG    0F800h         ;Program flash'da 0F800h adresinden itibaren yazıldı
+reset  MOV    #0280h,SP
+       MOW    #WDTPW+WDTHOLD,&WDTCTL
+       CLR    R6
+       CLR    R7
  
-       mov &0202h,r6
-       mov &0206h,r7
-       add r6,r7
-       mov r7,&020Ah
-       mov &0200h,r6
-       mov &0204h,r7
-       addc r6,r7
-       mov r7,&0208h 
-aa     jmp aa
+       MOV    &0202h,R6       ;Birinci sayının ilk 16 biti R6 ya kaydedildi
+       MOV    &0206h,R7       ;İkinci sayının ilk 16 biti R7 ye kaydedildi
+       ADD    R6,R7           ;İlk 16 bitler toplandı
+       MOV    R7,&020Ah       ;Toplanan ilk 16 bit 20Ah adresine yazıldı
+       MOV    &0200h,R6       ;Birinci sayının ikinci 16 biti R6 ya kaydedildi
+       MOV    &0204h,R7       ;İkinci sayının ikinci 16 biti R7 ye kaydedildi
+       ADDC   R6,R7           ;İkinci 16 bitler ve ilk 16 bitin eldesi(varsa) toplandı
+       MOV    R7,&0208h       ;Toplanan ikinci 16 bit 208h adresine yazıldı
+aa     JMP    aa
  
-       org 0FFFEh
-       dw reset
-       end
+       ORG    0FFFEh
+       DW     reset
+       END
