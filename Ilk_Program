@@ -1,15 +1,16 @@
-#include "msp430.h"          
-          org 0f800h
-reset     mov #0280h,SP 
-          mov #WDTPW+WDTHOLD,&WDTCTL 
-          bis.b #001h,&P1DIR           ;bis kaynak,hedef    P1.0 çıkış olarak ayarlandı
+#include "msp430.h"
 
-loop      xor.b #001h,&P1OUT           ;P1.0 çıkışı terslendi
-          mov #050000,R4
-wait      dec R4                       ;dec hedef
-          jnz wait                     ;jnz etiket    döngü ile bir süre bekleme sağlandı
-          jmp loop
+          ORG       0F800h
+reset     MOV       #0280h,SP 
+          MOV       #WDTPW+WDTHOLD,&WDTCTL 
+          BIS.B     #001h,&P1DIR             ;P1.0 çıkış olarak ayarlandı (bis kaynak,hedef)
 
-          org 0fffeh
-          dw reset
+loop      XOR.B     #001h,&P1OUT             ;P1.0 çıkışı terslendi
+          MOV       #050000,R4
+wait      DEC       R4                       ;R5 kaydedicisi 1 azaltıldı (dec hedef)
+          JNZ       wait                     ;Döngü ile bir süre bekleme sağlandı (jnz etiket)
+          JMP       loop
+
+          ORG 0FFFEh
+          DW reset
           END
